@@ -54,7 +54,7 @@ struct timespec diff(struct timespec* start, struct timespec* end)
     return d;
 }
 
-void printtime(struct timespec* d)
+void printtime(FILE* f, const char* msg, struct timespec* d)
 {
     time_t seconds, minutes, hours;
     long centis;
@@ -62,7 +62,7 @@ void printtime(struct timespec* d)
     minutes = d->tv_sec / 60 % 60;
     hours = d->tv_sec / 3600;
     centis = d->tv_nsec / 10000000;
-    printf("%ld:%02ld:%02ld.%ld\n", hours, minutes, seconds, centis);
+    fprintf(f, "%s%ld:%02ld:%02ld.%02ld\n", msg, hours, minutes, seconds, centis);
 }
 
 void handle(int signum)
@@ -76,9 +76,7 @@ void handle(int signum)
             gettime(&now);
             d = diff(&t, &now);
 
-            printf("\ntotal:   ");
-            printtime(&d);
-            fflush(stdout);
+            printtime(stdout, "total:   ", &d);
 
             gettime(&t);
         } else {
@@ -100,9 +98,7 @@ void printTimeEveryNowAndThen()
     d = diff(&t, &now);
     // XXX whatever
     if(!(d.tv_nsec / 10000000 == 0 && d.tv_sec == 0)) {
-        printf("elapsed: ");
-        printtime(&d);
-        fflush(stdout);
+        printtime(stderr, "elapsed: ", &d);
     }
 }
 
