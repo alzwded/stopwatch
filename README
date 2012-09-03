@@ -1,0 +1,4 @@
+simple linux console stop watch
+
+^C to show total and reset
+^4 or SIGQUIT to exit
